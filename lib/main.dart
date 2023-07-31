@@ -39,7 +39,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
-  final channel = IOWebSocketChannel.connect('wss://cube-app-ded2c0470b54.herokuapp.com/');
+  final channel = IOWebSocketChannel.connect('ws://192.168.1.83:5001');
 
   void _incrementCounter() {
     setState(() {
