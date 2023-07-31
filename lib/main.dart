@@ -1,5 +1,8 @@
 import 'dart:math';
 
+// import 'package:audioplayers/audio_cache.dart';
+// import 'package:assets_audio_player/assets_audio_player.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:web_socket_channel/io.dart';
@@ -7,6 +10,8 @@ import 'dart:convert';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:sensors/sensors.dart';
+// import 'package:audioplayers/audioplayers.dart';
+
 
 
 void main() {
@@ -40,6 +45,9 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
   final channel = IOWebSocketChannel.connect('wss://chehapp-e6007e815983.herokuapp.com');
+  // final audioPlayer = AudioPlayer();
+  static AudioCache player = AudioCache();
+  static String audioFile = 'notification.mp3';
 
   void _incrementCounter() {
     setState(() {
@@ -49,6 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
@@ -60,6 +69,13 @@ class _MyHomePageState extends State<MyHomePage> {
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 String message = snapshot.data;
+                // player.load(audioFile);
+                // AssetsAudioPlayer.newPlayer().open(
+                //   Audio(audioFile),
+                //   showNotification: true,
+                // );
+                player.play(audioFile);
+
                 // Process the received message as needed
                 return Text('Received message from server: $message');
               } else if (snapshot.hasError) {
@@ -78,12 +94,14 @@ class _MyHomePageState extends State<MyHomePage> {
     while (true) {
         channel.sink.add("Cheh");
         print('Sending data');
-        await Future.delayed(Duration(milliseconds: 500));
+        await Future.delayed(Duration(milliseconds: 1000));
     }
   }
   @override
   void initState() {
     super.initState();
+    player.load(audioFile);
+
     sendIMUData();
   }
   @override
