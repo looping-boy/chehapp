@@ -5,6 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:web_socket_channel/io.dart';
 import 'dart:convert';
 import 'dart:async';
+import 'package:flutter/material.dart';
+import 'package:sensors/sensors.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -73,6 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void sendIMUData() async {
     int i = 0;
+
     Map<String, double> currentRotation = {
       'gyro_x': 0.0,
       'gyro_y': 0.0,
@@ -86,26 +90,36 @@ class _MyHomePageState extends State<MyHomePage> {
         'gyro_z': Random().nextDouble() * 2 - 1.0,
       };
 
-      int duration = 30;
-      for (int frame = 0; frame < duration; frame++) {
-        double t = frame / duration;
-        Map<String, double> easedRotation = {};
-        for (String axis in ['gyro_x', 'gyro_y', 'gyro_z']) {
-          easedRotation[axis] = (currentRotation[axis]! + (targetRotation[axis]! - currentRotation[axis]!) * t);
-        }
+      // Initialize the gyroscope stream
+      gyroscopeEvents.listen((GyroscopeEvent event) {
+        setState(() {
+          // Update the currentRotation dictionary with gyroscope data
+          currentRotation['gyro_x'] = event.x;
+          currentRotation['gyro_y'] = event.y;
+          currentRotation['gyro_z'] = event.z;
+        });
+      });
 
-        // Convert to JSON and send to the server
-        String message = json.encode(easedRotation);
+      // int duration = 30;
+      // for (int frame = 0; frame < duration; frame++) {
+      //   double t = frame / duration;
+      //   Map<String, double> easedRotation = {};
+      //   for (String axis in ['gyro_x', 'gyro_y', 'gyro_z']) {
+      //     easedRotation[axis] = (currentRotation[axis]! + (targetRotation[axis]! - currentRotation[axis]!) * t);
+      //   }
+      //
+      //   // Convert to JSON and send to the server
+        String message = json.encode(currentRotation);
         channel.sink.add(message);
         print('Sending data $i');
-        i++;
-
-        // Wait for some time before sending the next frame
+      //   i++;
+      //
+      //   // Wait for some time before sending the next frame
         await Future.delayed(Duration(milliseconds: 20));
-      }
-
-      // Update the current rotation to the target rotation after the transition
-      currentRotation = targetRotation;
+      // }
+      //
+      // // Update the current rotation to the target rotation after the transition
+      // currentRotation = targetRotation;
     }
   }
   @override
