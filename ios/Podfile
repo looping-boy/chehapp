@@ -33,9 +33,9 @@ target 'Runner' do
   platform :ios, '11.0'
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
-  target 'RunnerTests' do
-    inherit! :search_paths
-  end
+#   target 'RunnerTests' do
+#     inherit! :search_paths
+#   end
 end
 
 post_install do |installer|
