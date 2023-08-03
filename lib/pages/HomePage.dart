@@ -51,13 +51,10 @@ class _MyHomePageState extends State<HomePage> {
                     height: 45,
                     color: Colors.grey[800],
                   ),
-                  Hero(
-                    tag: functionalities[0][0],
-                    child: Icon(
-                      Icons.person,
-                      size: 45,
-                      color: Colors.grey[800],
-                    ),
+                  Icon(
+                    Icons.person,
+                    size: 45,
+                    color: Colors.grey[800],
                   )
                 ],
               ),
