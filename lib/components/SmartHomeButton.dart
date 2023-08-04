@@ -37,15 +37,7 @@ class SmartHomeButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(15.0),
-      child: GestureDetector(
-        onTap: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      SendChat()));
-        },
-        child: Container(
+      child: Container(
           decoration: BoxDecoration(
               boxShadow: shadow,
               border: Border.all(color: (Colors.grey[800])!, width: 4),
@@ -79,7 +71,6 @@ class SmartHomeButton extends StatelessWidget {
             ],
           ),
         ),
-      ),
     );
   }
 }

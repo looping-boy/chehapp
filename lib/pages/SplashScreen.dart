@@ -2,9 +2,6 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-
-import '../utils/CupertinoRoute.dart';
-import '../utils/Routing.dart';
 import 'HomePage.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -74,16 +71,12 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   startTimer() async {
-    var duration = const Duration(seconds: 3);
+    var duration = const Duration(seconds: 1);
     return Timer(duration, route);
   }
 
   route() {
-    // final Routing routing = Routing();
-
     Widget route = const HomePage();
-
-
     Navigator.of(context).push(createRoute(route));
   }
 

@@ -1,17 +1,35 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_carousel_slider/carousel_slider.dart';
 
-class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const CustomAppBar({Key? key}) : super(key: key);
+class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
 
+  final CarouselSliderController carouselSliderController;
+  CustomAppBar({Key? key, required this.carouselSliderController});
+
+  @override
+  State<CustomAppBar> createState() => _CustomAppBarState();
+
+  @override
+  Size get preferredSize => Size.fromHeight(125.0);
+}
+
+class _CustomAppBarState extends State<CustomAppBar> {
   final double horizontalPadding = 40;
   final double verticalPadding = 25;
-  final double opacity = 1;
+
+  double opacity = 0;
 
   void animOpacity() {
-    // setState(() {
-    //   opacity = 1;
-    // });
+    setState(() {
+      opacity = 1;
+    });
+  }
+
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) => animOpacity());
   }
 
   @override
@@ -56,10 +74,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                     ),
                   ),
                 ),
-                Icon(
-                  Icons.person,
-                  size: 45,
-                  color: Colors.grey[900],
+                GestureDetector(
+                  // onTap: widget.carouselSliderController.nextPage(const Duration(seconds: 1)),
+                  child: Icon(
+                    Icons.person,
+                    size: 45,
+                    color: Colors.grey[900],
+                  ),
                 ),
               ],
             ),
@@ -73,7 +94,5 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
-  @override
-  // TODO: implement preferredSize
-  Size get preferredSize => Size.fromHeight(125.0);
+
 }

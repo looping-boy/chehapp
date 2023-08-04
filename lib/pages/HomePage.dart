@@ -1,12 +1,8 @@
 import 'package:chehapp/components/CustomAppBar.dart';
-import 'package:chehapp/components/SmartHomeButton.dart';
 import 'package:chehapp/pages/SendChat.dart';
-import 'package:chehapp/pages/SplashScreen.dart';
+import 'package:chehapp/pages/SnakeGame.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_carousel_slider/carousel_slider.dart';
-import 'package:google_fonts/google_fonts.dart';
-
-import '../utils/CupertinoRoute.dart';
 import 'MainPage.dart';
 
 class HomePage extends StatefulWidget {
@@ -21,28 +17,56 @@ class _MyHomePageState extends State<HomePage> {
   // static AudioCache player = AudioCache();
   // static String audioFile = 'notification.mp3';
 
+  final CarouselSliderController controller = CarouselSliderController();
 
+  List<Color> change = [(Colors.grey[400])!, (Colors.grey[400])!];
 
+  void animGradient() {
+    Future.delayed(const Duration(milliseconds: 300), () {
+      setState(() {
+        change = [(Colors.grey[400])!, (Colors.grey[500])!];
+      });
+    });
+  }
 
+  Widget nextPage = const SendChat();
 
-
-
-
-
-
+  void buttonIndexChange(int buttonIndex) {
+    if (buttonIndex == 0) {
+      setState(() { nextPage = const SendChat(); });
+    }
+    else if (buttonIndex == 1) {
+      setState(() { nextPage = const SnakeGame(); });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: Colors.grey[400],
-      appBar: CustomAppBar(),
-      body: CarouselSlider(
-        children: [
-          const MainPage(),
-          const SendChat()
-        ]
-      ),
+      appBar: CustomAppBar(carouselSliderController: controller),
+      body: AnimatedContainer(
+          clipBehavior: Clip.none,
+          duration: const Duration(seconds: 1),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              stops: [0.1, 0.9],
+              colors: [
+                change[0],
+                change[1],
+              ],
+            ),
+          ),
+          child: CarouselSlider(controller: controller, children: [
+            MainPage(carouselSliderController: controller,
+              buttonIndex: (int buttonIndex) {
+                buttonIndexChange(buttonIndex);
+              },),
+            nextPage
+
+          ])),
     );
   }
 
@@ -84,6 +108,8 @@ class _MyHomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => animGradient());
+
     // animOpacity();
     // animTitle();
     // player.load(audioFile);
