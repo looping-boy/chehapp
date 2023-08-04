@@ -25,7 +25,7 @@ class _MainPageState extends State<MainPage>
   final double verticalPadding = 25;
 
   List functionalities = [
-    ["Join The Room", "lib/icons/user.png", false],
+    ["Cheh Room", "lib/icons/user.png", false],
     ["Snake Cheh", "lib/icons/gamepad.png", true],
   ];
 
@@ -109,7 +109,8 @@ class _MainPageState extends State<MainPage>
               duration: const Duration(milliseconds: 300),
               curve: Curves.decelerate,
               child:
-                  Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Column(
+                      crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Padding(
                   padding: const EdgeInsets.only(top: 20.0),
                   child: Text(
@@ -164,6 +165,7 @@ class _MainPageState extends State<MainPage>
             child: SizedBox(
                 height: 400,
                 child: ListView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
                     itemCount: functionalities.length,
                     padding: const EdgeInsets.all(25),
                     itemBuilder: (context, index) {

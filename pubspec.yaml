@@ -68,6 +68,9 @@ flutter:
     - lib/icons/user.png
     - lib/icons/info.png
     - lib/icons/cheh.png
+    - lib/icons/guillaume.png
+    - lib/icons/thara.jpeg
+    - lib/icons/arnaud.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
