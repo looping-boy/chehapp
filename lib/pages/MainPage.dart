@@ -6,10 +6,9 @@ import 'package:google_fonts/google_fonts.dart';
 typedef void IntCallback(int index);
 
 class MainPage extends StatefulWidget {
-  final CarouselSliderController carouselSliderController;
-  final IntCallback buttonIndex;
 
-  const MainPage({super.key, required this.carouselSliderController, required this.buttonIndex});
+
+  const MainPage({super.key});
 
   @override
   State<MainPage> createState() => _MainPageState();
@@ -91,8 +90,8 @@ class _MainPageState extends State<MainPage>
   }
 
   void setCarousel(int buttonIndex) {
-    widget.buttonIndex(buttonIndex);
-    widget.carouselSliderController.nextPage(const Duration(milliseconds: 300));
+    // widget.buttonIndex(buttonIndex);
+    // widget.carouselSliderController.nextPage(const Duration(milliseconds: 300));
   }
 
 

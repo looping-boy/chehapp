@@ -1,9 +1,9 @@
 import 'package:chehapp/components/CustomAppBar.dart';
-import 'package:chehapp/pages/Home.dart';
 import 'package:chehapp/pages/SendChat.dart';
 import 'package:chehapp/pages/SnakeGame.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_carousel_slider/carousel_slider.dart';
+import 'Home.dart';
 import 'MainPage.dart';
 
 class HomePage extends StatefulWidget {

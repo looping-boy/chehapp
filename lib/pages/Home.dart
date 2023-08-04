@@ -2,6 +2,9 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
+import 'MainPage.dart';
+import 'SendChat.dart';
+
 class GradientTween extends Tween<Gradient> {
   GradientTween({Gradient? begin, Gradient? end}) : super(begin: begin, end: end);
 
@@ -96,8 +99,14 @@ class HomeState extends State<Home> {
     super.reassemble();
   }
 
+  Widget nextPage = const SendChat();
+
+
   @override
   Widget build(BuildContext context) {
+
+
+
     return Scaffold(
       body: AnimatedBuilder(
         animation: pageController,
@@ -114,10 +123,8 @@ class HomeState extends State<Home> {
         child: PageView(
           controller: pageController,
           children: [
-            Center(child: Text("Orange", style: TextStyle(fontSize: 30, color: Colors.white))),
-            Center(child: Text("Purple", style: TextStyle(fontSize: 30, color: Colors.white))),
-            Center(child: Text("Lime", style: TextStyle(fontSize: 30, color: Colors.white))),
-            Center(child: Text("Blue", style: TextStyle(fontSize: 30, color: Colors.white))),
+            MainPage(),
+            nextPage
           ],
         ),
       ),
