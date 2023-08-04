@@ -1,4 +1,5 @@
 import 'package:chehapp/components/CustomAppBar.dart';
+import 'package:chehapp/pages/Home.dart';
 import 'package:chehapp/pages/SendChat.dart';
 import 'package:chehapp/pages/SnakeGame.dart';
 import 'package:flutter/material.dart';
@@ -17,14 +18,16 @@ class _MyHomePageState extends State<HomePage> {
   // static AudioCache player = AudioCache();
   // static String audioFile = 'notification.mp3';
 
+  Color menuColor = (Colors.grey[500])!;
+
   final CarouselSliderController controller = CarouselSliderController();
 
   List<Color> change = [(Colors.grey[400])!, (Colors.grey[400])!];
 
-  void animGradient() {
+  void animGradient(Color color) {
     Future.delayed(const Duration(milliseconds: 300), () {
       setState(() {
-        change = [(Colors.grey[400])!, (Colors.grey[500])!];
+        change = [(Colors.grey[400])!, color];
       });
     });
   }
@@ -34,9 +37,11 @@ class _MyHomePageState extends State<HomePage> {
   void buttonIndexChange(int buttonIndex) {
     if (buttonIndex == 0) {
       setState(() { nextPage = const SendChat(); });
+      animGradient((Colors.grey[900])!);
     }
     else if (buttonIndex == 1) {
       setState(() { nextPage = const SnakeGame(); });
+      animGradient((Colors.grey[100])!);
     }
   }
 
@@ -45,28 +50,7 @@ class _MyHomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: Colors.grey[400],
       appBar: CustomAppBar(carouselSliderController: controller),
-      body: AnimatedContainer(
-          clipBehavior: Clip.none,
-          duration: const Duration(seconds: 1),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              stops: [0.1, 0.9],
-              colors: [
-                change[0],
-                change[1],
-              ],
-            ),
-          ),
-          child: CarouselSlider(controller: controller, children: [
-            MainPage(carouselSliderController: controller,
-              buttonIndex: (int buttonIndex) {
-                buttonIndexChange(buttonIndex);
-              },),
-            nextPage
-
-          ])),
+      body: Home(),
     );
   }
 
@@ -108,7 +92,8 @@ class _MyHomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => animGradient());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => animGradient(menuColor));
 
     // animOpacity();
     // animTitle();

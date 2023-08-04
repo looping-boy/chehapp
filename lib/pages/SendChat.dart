@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-
 import '../components/UserContainer.dart';
 import 'HomePage.dart';
 
@@ -47,7 +46,6 @@ class _SendChatState extends State<SendChat> {
     ["Guillaume", "lib/icons/guillaume.png", true],
     ["Arnaud", "lib/icons/arnaud.jpeg", true],
     ["Thara", "lib/icons/thara.jpeg", true],
-
   ];
 
   @override
@@ -57,35 +55,33 @@ class _SendChatState extends State<SendChat> {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 10.0),
           child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Text(
                 "Cheh Room",
                 style:
-                GoogleFonts.bebasNeue(fontSize: 72, textStyle: shadowLight).merge(TextStyle(letterSpacing: 4.0)),
+                    GoogleFonts.bebasNeue(fontSize: 72, textStyle: shadowLight)
+                        .merge(TextStyle()),
               ),
               Expanded(
-                    child: ListView.builder(
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: users.length,
-                        padding: const EdgeInsets.all(0),
-                        itemBuilder: (context, index) {
-                          return GestureDetector(
-                            child: AnimatedContainer(
-                              curve: Curves.easeInOut,
-                              duration: Duration(milliseconds: 300 + (index * 150)),
-                              transform: Matrix4.translationValues(
-                                  0, startAnimation ? 0 : screenWidth, 0),
-                              child: UserContainer(
-                                name: users[index][0],
-                                iconPath: users[index][1],
-                                colorTriggered: users[index][2],
-                                onClicked: (value) => userClicked(value, index),
-                              ),
-                            ),
-                          );
-                        }),
+                child: ListView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: users.length,
+                    itemBuilder: (context, index) {
+                      return AnimatedContainer(
+                        curve: Curves.easeInOut,
+                        duration: Duration(milliseconds: 300 + (index * 150)),
+                        transform: Matrix4.translationValues(
+                            0, startAnimation ? 0 : screenWidth, 0),
+                        child: UserContainer(
+                          name: users[index][0],
+                          iconPath: users[index][1],
+                          colorTriggered: users[index][2],
+                          onClicked: (value) => userClicked(value, index),
+                        ),
+                      );
+                    }),
               ),
             ],
           ),
