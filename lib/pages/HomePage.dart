@@ -1,6 +1,9 @@
 import 'package:chehapp/components/SmartHomeButton.dart';
+import 'package:chehapp/pages/SplashScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import '../utils/CupertinoRoute.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -54,25 +57,30 @@ class _MyHomePageState extends State<HomePage> {
     });
   }
 
+  double screenWidth = 0;
+  bool startAnimation = false;
 
-
-  Alignment align = const Alignment(12, 0);
+  Alignment align = const Alignment(20, 0);
   void animTitle() {
     setState(() {
     align = Alignment.centerLeft;
   });
-    Future.delayed(const Duration(milliseconds: 200), () {
+    Future.delayed(const Duration(milliseconds: 150), () {
       animBar();
       Future.delayed(const Duration(milliseconds: 150), () {
         animText();
+        Future.delayed(const Duration(milliseconds: 150), () {
+          setState(() { startAnimation = true; });
+        });
       });
     });
   }
 
-  Alignment alignBar = const Alignment(12, 0);
+
+  Alignment alignBar = const Alignment(20, 0);
   void animBar() { setState(() { alignBar = Alignment.centerLeft; }); }
 
-  Alignment alignText = const Alignment(12, 0);
+  Alignment alignText = const Alignment(20, 0);
   void animText() { setState(() { alignText = Alignment.centerLeft; }); }
 
   double opacity = 0;
@@ -85,6 +93,8 @@ class _MyHomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: Colors.grey[400],
       body: SafeArea(
@@ -202,19 +212,20 @@ class _MyHomePageState extends State<HomePage> {
             ),
 
             Expanded(
-                child: GridView.builder(
+                child: ListView.builder(
                     itemCount: functionalities.length,
                     padding: const EdgeInsets.all(25),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 1,
-                        childAspectRatio: 1 / 0.6
-                    ),
                     itemBuilder: (context, index) {
-                      return SmartHomeButton(
-                        smartButtonName: functionalities[index][0],
-                        iconPath: functionalities[index][1],
-                        powerOn: functionalities[index][2],
-                        onChanged: (value) => switchChanged(value, index),
+                      return AnimatedContainer(
+                        curve: Curves.easeInOut,
+                        duration: Duration(milliseconds: 300 + (index * 150)),
+                        transform: Matrix4.translationValues(startAnimation ? 0 : screenWidth, 0, 0),
+                        child: SmartHomeButton(
+                          smartButtonName: functionalities[index][0],
+                          iconPath: functionalities[index][1],
+                          powerOn: functionalities[index][2],
+                          onChanged: (value) => switchChanged(value, index),
+                        ),
                       );
                     }))
           ],
@@ -263,7 +274,6 @@ class _MyHomePageState extends State<HomePage> {
     super.initState();
     // animTitle();
     WidgetsBinding.instance.addPostFrameCallback((_) => animTitle());
-
     // player.load(audioFile);
 
     // sendIMUData();

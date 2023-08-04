@@ -1,59 +1,65 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 import 'HomePage.dart';
 
-class SendChat extends StatelessWidget {
-  final double horizontalPadding = 40;
-  final double verticalPadding = 25;
-  final String smartButtonName;
-  final String iconPath;
-  const SendChat({super.key, required String this.smartButtonName, required this.iconPath});
+class SendChat extends StatefulWidget {
+  const SendChat({super.key});
+
+  @override
+  State<SendChat> createState() => _SendChatState();
+}
+
+class _SendChatState extends State<SendChat> {
+
+  bool isSwipingLeftToRight = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[300],
-      body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: EdgeInsets.symmetric(
-                  horizontal: horizontalPadding, vertical: verticalPadding),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Image.asset(
-                    "lib/icons/fourdots.png",
-                    height: 45,
-                    color: Colors.grey[800],
-                  ),
-                  Hero(
-                      tag: smartButtonName,
-                      child: Image.asset(
-                          iconPath,
-                          height: 45,
-                          width: 45,
-                        color: Colors.grey[800],
-                      )),
-                ],
+      appBar: AppBar(
+        title: Text('Swipe Gesture Detection'),
+      ),
+      body: GestureDetector(
+        onHorizontalDragStart: (details) {
+          // Reset the flag when the user starts the swipe gesture
+          isSwipingLeftToRight = false;
+        },
+        onHorizontalDragUpdate: (DragUpdateDetails details) {
+          // Calculate the horizontal drag distance
+          double dragDistance = details.primaryDelta ?? 0;
+
+          // If the user is swiping from left to right (positive drag distance)
+          // set the flag to true
+          if (dragDistance > 20) {
+            setState(() {
+              isSwipingLeftToRight = true;
+            });
+          }
+        },
+        onHorizontalDragEnd: (details) {
+          // Handle any logic after the swipe gesture ends (optional)
+        },
+        child: Center(
+          child: Container(
+            width: 200,
+            height: 200,
+            color: isSwipingLeftToRight ? Colors.green : Colors.blue,
+            child: Center(
+              child: Text(
+                isSwipingLeftToRight ? 'Swiped Left to Right' : 'Swipe to Change Color',
+                style: TextStyle(color: Colors.white),
               ),
             ),
-            const SizedBox(height: 20),
-
-
-
-
-
-          ],
+          ),
         ),
       ),
     );
-
   }
-
 }
 
 

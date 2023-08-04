@@ -12,6 +12,10 @@ class SmartHomeButton extends StatelessWidget {
   final bool powerOn;
   void Function(bool)? onChanged;
 
+  void anim() {
+
+  }
+
   final shadow = [
     const BoxShadow(
         blurRadius: 20.0,
@@ -39,10 +43,7 @@ class SmartHomeButton extends StatelessWidget {
               context,
               MaterialPageRoute(
                   builder: (context) =>
-                      SendChat(
-                        smartButtonName: smartButtonName,
-                        iconPath: iconPath,
-                      )));
+                      SendChat()));
         },
         child: Container(
           decoration: BoxDecoration(
