@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 
 import 'MainPage.dart';
 import 'SendChat.dart';
+import 'SnakeGame.dart';
 
 class GradientTween extends Tween<Gradient> {
-  GradientTween({Gradient? begin, Gradient? end}) : super(begin: begin, end: end);
+  GradientTween({Gradient? begin, Gradient? end})
+      : super(begin: begin, end: end);
 
   @override
   Gradient lerp(double t) {
@@ -18,14 +20,16 @@ class GradientTween extends Tween<Gradient> {
 
       final lerpColors = List<Color>.generate(
         beginGradient.colors.length,
-            (index) => Color.lerp(beginGradient.colors[index], endGradient.colors[index], t)!,
+        (index) => Color.lerp(
+            beginGradient.colors[index], endGradient.colors[index], t)!,
       );
 
       return LinearGradient(
-        begin: Alignment.lerp(beginGradient.begin as Alignment?, endGradient.begin as Alignment?, t)!,
-        end: Alignment.lerp(beginGradient.end as Alignment?, endGradient.end as Alignment?, t)!,
+        begin: Alignment.lerp(beginGradient.begin as Alignment?,
+            endGradient.begin as Alignment?, t)!,
+        end: Alignment.lerp(
+            beginGradient.end as Alignment?, endGradient.end as Alignment?, t)!,
         colors: lerpColors,
-
         tileMode: t < 0.5 ? beginGradient.tileMode : endGradient.tileMode,
         transform: t < 0.5 ? beginGradient.transform : endGradient.transform,
       );
@@ -49,6 +53,8 @@ class HomeState extends State<Home> {
   late PageController pageController;
   late Animatable<Gradient> background;
 
+  Color colorGradient = Colors.blue[400]!;
+
   @override
   void initState() {
     _initialize();
@@ -56,6 +62,11 @@ class HomeState extends State<Home> {
   }
 
   void _initialize() {
+    setBackground();
+    pageController = PageController();
+  }
+
+  void setBackground() {
     background = TweenSequence<Gradient>([
       TweenSequenceItem(
         weight: 1.0,
@@ -63,12 +74,12 @@ class HomeState extends State<Home> {
           begin: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Colors.grey[400]!, Colors.deepPurple[400]!],
+            colors: [Colors.grey[400]!, Colors.grey[400]!],
           ),
           end: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Colors.grey[400]!, Colors.yellow[300]!],
+            colors: [colorGradient, Colors.grey[400]!],
           ),
         ),
       ),
@@ -89,7 +100,6 @@ class HomeState extends State<Home> {
       ),
       // Add more pages here if needed.
     ]);
-    pageController = PageController();
   }
 
   @override
@@ -101,17 +111,31 @@ class HomeState extends State<Home> {
 
   Widget nextPage = const SendChat();
 
+  void buttonIndexChange(int buttonIndex) {
+    if (buttonIndex == 0) {
+      setState(() {
+        colorGradient = Colors.blue[400]!;
+        nextPage = const SendChat();
+        setBackground();
+      });
+    } else if (buttonIndex == 1) {
+      setState(() {
+        colorGradient = Colors.green[400]!;
+        nextPage = const SnakeGame();
+        setBackground();
+      });
+    }
+    pageController.animateToPage(1, duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
+  }
 
   @override
   Widget build(BuildContext context) {
-
-
-
     return Scaffold(
       body: AnimatedBuilder(
         animation: pageController,
         builder: (context, child) {
-          final color = pageController.hasClients ? pageController.page! / 3 : .0;
+          final color =
+              pageController.hasClients ? pageController.page! / 3 : .0;
 
           return DecoratedBox(
             decoration: BoxDecoration(
@@ -120,12 +144,20 @@ class HomeState extends State<Home> {
             child: child,
           );
         },
-        child: PageView(
-          controller: pageController,
-          children: [
-            MainPage(),
-            nextPage
-          ],
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          child: Align(
+            alignment: FractionalOffset.bottomCenter,
+            child: PageView(
+              controller: pageController,
+              children: [
+                MainPage(buttonIndex: (int buttonIndex) {
+                  buttonIndexChange(buttonIndex);
+                }),
+                nextPage
+              ],
+            ),
+          ),
         ),
       ),
     );

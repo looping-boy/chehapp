@@ -6,9 +6,9 @@ import 'package:google_fonts/google_fonts.dart';
 typedef void IntCallback(int index);
 
 class MainPage extends StatefulWidget {
+  final IntCallback buttonIndex;
 
-
-  const MainPage({super.key});
+  const MainPage({super.key, required this.buttonIndex});
 
   @override
   State<MainPage> createState() => _MainPageState();
@@ -89,106 +89,107 @@ class _MainPageState extends State<MainPage>
     });
   }
 
-  void setCarousel(int buttonIndex) {
-    // widget.buttonIndex(buttonIndex);
-    // widget.carouselSliderController.nextPage(const Duration(milliseconds: 300));
+  void setButtonIndex(int buttonIndex) {
+    widget.buttonIndex(buttonIndex);
   }
-
 
   @override
   Widget build(BuildContext context) {
-    screenWidth = MediaQuery.of(context).size.height;
-    return Column(
-        children: <Widget>[
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
-            child: AnimatedContainer(
-              alignment: align,
+    screenWidth = MediaQuery.of(context).size.width;
+    return Padding(
+      padding: const EdgeInsets.only(top: 170),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+              child: AnimatedContainer(
+                alignment: align,
+                onEnd: () => {},
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.decelerate,
+                child:
+                    Column(
+                        crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20.0),
+                    child: Text(
+                      "Welcome to the",
+                      style: shadowStrong
+                          .merge(TextStyle(fontSize: 20, color: Colors.grey[700])),
+                    ),
+                  ),
+                  Text(
+                    "CHEH APP",
+                    style:
+                        GoogleFonts.bebasNeue(fontSize: 72, textStyle: shadowLight),
+                  ),
+                ]),
+              ),
+            ),
+            const SizedBox(height: 10),
+            Padding(
+              padding:
+                  EdgeInsets.fromLTRB(horizontalPadding, 0, horizontalPadding, 8.0),
+              child: AnimatedContainer(
+                alignment: alignBar,
+                onEnd: () => {},
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.decelerate,
+                child: Container(
+                  height: 2.0,
+                  width: 250.0,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            AnimatedContainer(
+              alignment: alignText,
               onEnd: () => {},
               duration: const Duration(milliseconds: 300),
               curve: Curves.decelerate,
-              child:
-                  Column(
-                      crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 20.0),
-                  child: Text(
-                    "Welcome to the",
-                    style: shadowStrong
-                        .merge(TextStyle(fontSize: 20, color: Colors.grey[700])),
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+                child: Text(
+                  "Try our features below :",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24,
+                    color: Colors.grey[900],
                   ),
                 ),
-                Text(
-                  "CHEH APP",
-                  style:
-                      GoogleFonts.bebasNeue(fontSize: 72, textStyle: shadowLight),
-                ),
-              ]),
-            ),
-          ),
-          const SizedBox(height: 10),
-          Padding(
-            padding:
-                EdgeInsets.fromLTRB(horizontalPadding, 0, horizontalPadding, 8.0),
-            child: AnimatedContainer(
-              alignment: alignBar,
-              onEnd: () => {},
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.decelerate,
-              child: Container(
-                height: 2.0,
-                width: 250.0,
-                color: Colors.black,
               ),
             ),
-          ),
-          const SizedBox(height: 10),
-          AnimatedContainer(
-            alignment: alignText,
-            onEnd: () => {},
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.decelerate,
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
-              child: Text(
-                "Try our features below :",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 24,
-                  color: Colors.grey[900],
-                ),
-              ),
-            ),
-          ),
-          Expanded(
-            child: SizedBox(
-                height: 400,
-                child: ListView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                    itemCount: functionalities.length,
-                    padding: const EdgeInsets.all(25),
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onTap: () => {
-                          setCarousel(index)
-                        },
-                        child: AnimatedContainer(
-                          curve: Curves.easeInOut,
-                          duration: Duration(milliseconds: 300 + (index * 150)),
-                          transform: Matrix4.translationValues(
-                              0, startAnimation ? 0 : screenWidth, 0),
-                          child: SmartHomeButton(
-                            smartButtonName: functionalities[index][0],
-                            iconPath: functionalities[index][1],
-                            powerOn: functionalities[index][2],
-                            onChanged: (value) => switchChanged(value, index),
+            SizedBox(
+                  height: 400,
+                  child: ListView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                      itemCount: functionalities.length,
+                      padding: const EdgeInsets.all(25),
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: () => {
+                            setButtonIndex(index)
+                          },
+                          child: AnimatedContainer(
+                            curve: Curves.easeInOut,
+                            duration: Duration(milliseconds: 300 + (index * 150)),
+                            transform: Matrix4.translationValues(
+                                startAnimation ? 0 : screenWidth, 0, 0),
+                            child: SmartHomeButton(
+                              smartButtonName: functionalities[index][0],
+                              iconPath: functionalities[index][1],
+                              powerOn: functionalities[index][2],
+                              onChanged: (value) => switchChanged(value, index),
+                            ),
                           ),
-                        ),
-                      );
-                    })),
-          )
-        ],
-      );
+                        );
+                      })),
+
+          ],
+        ),
+    );
 
   }
 

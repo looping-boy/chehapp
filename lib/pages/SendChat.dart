@@ -50,41 +50,59 @@ class _SendChatState extends State<SendChat> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        alignment: Alignment.center,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 10.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Text(
-                "Cheh Room",
-                style:
-                    GoogleFonts.bebasNeue(fontSize: 72, textStyle: shadowLight)
-                        .merge(TextStyle()),
-              ),
-              Expanded(
-                child: ListView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: users.length,
-                    itemBuilder: (context, index) {
-                      return AnimatedContainer(
-                        curve: Curves.easeInOut,
-                        duration: Duration(milliseconds: 300 + (index * 150)),
-                        transform: Matrix4.translationValues(
-                            0, startAnimation ? 0 : screenWidth, 0),
-                        child: UserContainer(
-                          name: users[index][0],
-                          iconPath: users[index][1],
-                          colorTriggered: users[index][2],
-                          onClicked: (value) => userClicked(value, index),
-                        ),
-                      );
-                    }),
-              ),
-            ],
+    return Padding(
+      padding: const EdgeInsets.only(left: 32.0, right: 32.0, top: 210),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            "Cheh Room",
+            style:
+                GoogleFonts.bebasNeue(fontSize: 72, textStyle: shadowLight)
+                    .merge(TextStyle()),
           ),
-        ));
+          const SizedBox(height: 10),
+          Padding(
+            padding:
+            EdgeInsets.fromLTRB(4, 0, 0, 8.0),
+            child: AnimatedContainer(
+              alignment: Alignment.centerLeft,
+              onEnd: () => {},
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.decelerate,
+              child: Container(
+                height: 2.0,
+                width: 250.0,
+                color: Colors.black,
+              ),
+            ),
+          ),
+
+          SizedBox(
+            height: 400,
+            child: ListView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: users.length,
+                  itemBuilder: (context, index) {
+                    return AnimatedContainer(
+                      curve: Curves.easeInOut,
+                      duration: Duration(milliseconds: 300 + (index * 150)),
+                      transform: Matrix4.translationValues(
+                          0, startAnimation ? 0 : screenWidth, 0),
+                      child: UserContainer(
+                        name: users[index][0],
+                        iconPath: users[index][1],
+                        colorTriggered: users[index][2],
+                        onClicked: (value) => userClicked(value, index),
+                      ),
+                    );
+                  }),
+          ),
+
+        ],
+      ),
+    );
   }
 }

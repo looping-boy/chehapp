@@ -24,33 +24,22 @@ class _MyHomePageState extends State<HomePage> {
 
   List<Color> change = [(Colors.grey[400])!, (Colors.grey[400])!];
 
-  void animGradient(Color color) {
-    Future.delayed(const Duration(milliseconds: 300), () {
-      setState(() {
-        change = [(Colors.grey[400])!, color];
-      });
-    });
-  }
-
-  Widget nextPage = const SendChat();
-
-  void buttonIndexChange(int buttonIndex) {
-    if (buttonIndex == 0) {
-      setState(() { nextPage = const SendChat(); });
-      animGradient((Colors.grey[900])!);
-    }
-    else if (buttonIndex == 1) {
-      setState(() { nextPage = const SnakeGame(); });
-      animGradient((Colors.grey[100])!);
-    }
-  }
+  double screenWidth = 0;
+  double screenHeight = 0;
 
   @override
   Widget build(BuildContext context) {
+    screenWidth = MediaQuery.of(context).size.width;
+    screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
-      backgroundColor: Colors.grey[400],
-      appBar: CustomAppBar(carouselSliderController: controller),
-      body: Home(),
+      backgroundColor: Colors.transparent,
+      body: Stack(
+        children: [
+          Home(),
+          CustomAppBar(),
+        ],
+      ),
     );
   }
 
@@ -93,7 +82,7 @@ class _MyHomePageState extends State<HomePage> {
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => animGradient(menuColor));
+    // WidgetsBinding.instance.addPostFrameCallback((_) => animGradient(menuColor));
 
     // animOpacity();
     // animTitle();

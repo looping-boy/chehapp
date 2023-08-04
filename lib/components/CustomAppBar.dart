@@ -4,8 +4,7 @@ import 'package:flutter_carousel_slider/carousel_slider.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
 
-  final CarouselSliderController carouselSliderController;
-  CustomAppBar({Key? key, required this.carouselSliderController});
+  CustomAppBar({Key? key});
 
   @override
   State<CustomAppBar> createState() => _CustomAppBarState();
