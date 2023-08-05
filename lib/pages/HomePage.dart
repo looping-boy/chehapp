@@ -53,16 +53,11 @@ class _MyHomePageState extends State<HomePage> with SingleTickerProviderStateMix
           _offset = Offset(0, _offset.dy + details.delta.dy);
           if (_offset.dy < _MyHomePageState._minHeight) {
             _offset = Offset(0, _MyHomePageState._minHeight);
-            _isOpen = false;
           } else if (_offset.dy > _MyHomePageState._maxHeight) {
             _offset = Offset(0, _MyHomePageState._maxHeight);
-            _isOpen = true;
           }
 
-          _blurValue = (_offset.dy - _minHeight) / (_maxHeight - _minHeight) * 20;
-
-          double t = (_offset.dy - _minHeight) / (_maxHeight - _minHeight);
-          _opacity = sqrt(t);
+          changeBlurAndOpacity();
 
           setState(() {});
         },
@@ -92,6 +87,12 @@ class _MyHomePageState extends State<HomePage> with SingleTickerProviderStateMix
   }
 
   String test = "Test";
+
+  void changeBlurAndOpacity() {
+    _blurValue = pow((_offset.dy - _minHeight) / (_maxHeight - _minHeight), 1 / 3) * 20;
+    double t = (_offset.dy - _minHeight) / (_maxHeight - _minHeight);
+    _opacity = pow(t, 1 / 1.5).toDouble();
+  }
 
   void openOrCloseMenu() {
     double snapHeight = _isOpen ? _minHeight : _maxHeight;
@@ -123,15 +124,14 @@ class _MyHomePageState extends State<HomePage> with SingleTickerProviderStateMix
 
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 100),
+      duration: const Duration(milliseconds: 200),
 
     );
     _animation = Tween<double>(begin: _offset.dy, end: _offset.dy).animate(_animationController)
       ..addListener(() {
         setState(() {
           _offset = Offset(0, _animation.value);
-          _blurValue = (_offset.dy - _minHeight) / (_maxHeight - _minHeight) * 20;
-          _opacity = ((_offset.dy - _minHeight) / (_maxHeight - _minHeight));
+          changeBlurAndOpacity();
         });
       });
   }
