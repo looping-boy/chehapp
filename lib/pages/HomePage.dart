@@ -6,6 +6,7 @@ import 'package:chehapp/pages/SnakeGame.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_carousel_slider/carousel_slider.dart';
 import '../components/CustomAppBar2.dart';
+import '../components/MenuItems.dart';
 import 'Home.dart';
 import 'dart:ui';
 import 'MainPage.dart';
@@ -79,7 +80,8 @@ class _MyHomePageState extends State<HomePage> with SingleTickerProviderStateMix
               ),
             ),
             CustomAppBar2(offset: _offset, opacity: _opacity, onChehClicked: openOrCloseMenu),
-            SafeArea(child: Text(test)),
+            MenuItems(offset: (_offset.dy - _minHeight) / (_maxHeight - _minHeight),),
+            SafeArea(child: Text(((_offset.dy - _minHeight) / (_maxHeight - _minHeight)).toString())),
           ],
         ),
       ),

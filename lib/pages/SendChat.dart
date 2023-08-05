@@ -1,13 +1,9 @@
 import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import '../components/UserContainer.dart';
-import 'HomePage.dart';
 
 class SendChat extends StatefulWidget {
   const SendChat({super.key});
