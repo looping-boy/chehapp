@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_carousel_slider/carousel_slider.dart';
 import '../components/CustomAppBar2.dart';
 import 'Home.dart';
+import 'dart:ui';
 import 'MainPage.dart';
 import 'dart:developer' as developer;
 
@@ -33,6 +34,9 @@ class _MyHomePageState extends State<HomePage> with SingleTickerProviderStateMix
   late AnimationController _animationController;
   late Animation<double> _animation;
 
+  double _blurValue = 0;
+  GlobalKey _backdropFilterKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     screenWidth = MediaQuery.of(context).size.width;
@@ -44,7 +48,38 @@ class _MyHomePageState extends State<HomePage> with SingleTickerProviderStateMix
       body: Stack(
         alignment: Alignment.topCenter,
         children: [
+          // AnimatedBuilder(
+          //   animation: _animationController,
+          //   child: Home(),
+          //   builder: (context, child) => BackdropFilter(
+          //         filter: ui.ImageFilter.blur(
+          //           sigmaX: 8.0,
+          //           sigmaY: 8.0,
+          //         ),
+          //         child: child,
+          //   )
+          //   ,
+          // ),
           Home(),
+          IgnorePointer(
+            ignoring: true,
+            child: Positioned.fill(
+              child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: _blurValue, sigmaY: _blurValue),
+                  child: Padding(
+                    padding: const EdgeInsets.all(32.0),
+                    child: Container(color: Colors.transparent),
+                    ),
+                  ),
+            ),
+          ),
+          // BackdropFilter(
+          //   filter: ImageFilter.blur(
+          //     sigmaX: 20.0,
+          //     sigmaY: 20.0,
+          //   ),
+          //   child: Home(),
+          // ),
           GestureDetector(
             onPanUpdate: (details) {
               _offset = Offset(0, _offset.dy + details.delta.dy);
@@ -55,6 +90,8 @@ class _MyHomePageState extends State<HomePage> with SingleTickerProviderStateMix
                 _offset = Offset(0, _MyHomePageState._maxHeight);
                 _isOpen = true;
               }
+              _blurValue = (_offset.dy - _minHeight) / (_maxHeight - _minHeight) * 20;
+
               setState(() {});
             },
             onPanEnd: _handlePanEnd,
@@ -103,12 +140,13 @@ class _MyHomePageState extends State<HomePage> with SingleTickerProviderStateMix
 
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 200),
+      duration: const Duration(milliseconds: 100),
     );
     _animation = Tween<double>(begin: _offset.dy, end: _offset.dy).animate(_animationController)
       ..addListener(() {
         setState(() {
           _offset = Offset(0, _animation.value);
+          _blurValue = (_offset.dy - _minHeight) / (_maxHeight - _minHeight) * 20;
         });
       });
   }
