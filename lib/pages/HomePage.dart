@@ -68,7 +68,6 @@ class _MyHomePageState extends State<HomePage> with SingleTickerProviderStateMix
         },
         onPanEnd: _handlePanEnd,
         child: Stack(
-
           alignment: Alignment.topCenter,
           children: [
             Home(),
@@ -84,39 +83,33 @@ class _MyHomePageState extends State<HomePage> with SingleTickerProviderStateMix
                     ),
               ),
             ),
-            AnimatedContainer(
-              duration: Duration.zero,
-              curve: Curves.easeOut,
-              height: _offset.dy,
-              alignment: Alignment.bottomCenter,
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.black.withOpacity(_opacity), width: 3, strokeAlign: BorderSide.strokeAlignOutside),
-                  color: Colors.white.withOpacity(_opacity),
-                  borderRadius: const BorderRadius.only(
-                    bottomLeft: Radius.circular(30),
-                    bottomRight: Radius.circular(30),
-                  ),
-                  boxShadow: [
-                    BoxShadow(color: (Colors.grey[400])!.withOpacity(0), spreadRadius: 0, blurRadius: 0)
-                  ]),
-              child: CustomAppBar2(),
-            ),
-            SafeArea(child: Text(_offset.dy.toString())),
+            CustomAppBar2(offset: _offset, opacity: _opacity, onChehClicked: openOrCloseMenu),
+            SafeArea(child: Text(test)),
           ],
         ),
       ),
     );
   }
 
-  void _handlePanEnd(DragEndDetails details) {
+  String test = "Test";
+
+  void openOrCloseMenu() {
+    double snapHeight = _isOpen ? _minHeight : _maxHeight;
+    _animation = Tween<double>(begin: _offset.dy, end: snapHeight).animate(_animationController);
+    _animationController.reset();
+    _animationController.forward();
+    _isOpen = !_isOpen;
+  }
+
+  void _handlePanEnd(_) {
     double snapHeight;
 
     if (_offset.dy < (_maxHeight - _minHeight) / 2 + _minHeight) {
       snapHeight = _minHeight;
-      // _isOpen = false;
+      _isOpen = false;
     } else {
       snapHeight = _maxHeight;
-      // _isOpen = true;
+      _isOpen = true;
     }
 
     _animation = Tween<double>(begin: _offset.dy, end: snapHeight).animate(_animationController);
@@ -131,6 +124,7 @@ class _MyHomePageState extends State<HomePage> with SingleTickerProviderStateMix
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 100),
+
     );
     _animation = Tween<double>(begin: _offset.dy, end: _offset.dy).animate(_animationController)
       ..addListener(() {
@@ -146,6 +140,5 @@ class _MyHomePageState extends State<HomePage> with SingleTickerProviderStateMix
   void dispose() {
     super.dispose();
     _animationController.dispose();
-
   }
 }
