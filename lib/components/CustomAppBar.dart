@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_carousel_slider/carousel_slider.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
 
@@ -24,7 +23,6 @@ class _CustomAppBarState extends State<CustomAppBar> {
       opacity = 1;
     });
   }
-
 
   @override
   void initState() {
@@ -84,14 +82,8 @@ class _CustomAppBarState extends State<CustomAppBar> {
               ],
             ),
           ),
-          // const SizedBox(height: 20),
-
-
-
         ],
       ),
     );
   }
-
-
 }
