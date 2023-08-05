@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:chehapp/components/CustomAppBar.dart';
 import 'package:chehapp/pages/SendChat.dart';
 import 'package:chehapp/pages/SnakeGame.dart';
@@ -35,85 +37,73 @@ class _MyHomePageState extends State<HomePage> with SingleTickerProviderStateMix
   late Animation<double> _animation;
 
   double _blurValue = 0;
-  GlobalKey _backdropFilterKey = GlobalKey();
+
+  double _opacity = 0;
 
   @override
   Widget build(BuildContext context) {
     screenWidth = MediaQuery.of(context).size.width;
     screenHeight = MediaQuery.of(context).size.height;
-    _maxHeight = MediaQuery.of(context).size.height;
+    // _maxHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       backgroundColor: Colors.transparent,
-      body: Stack(
-        alignment: Alignment.topCenter,
-        children: [
-          // AnimatedBuilder(
-          //   animation: _animationController,
-          //   child: Home(),
-          //   builder: (context, child) => BackdropFilter(
-          //         filter: ui.ImageFilter.blur(
-          //           sigmaX: 8.0,
-          //           sigmaY: 8.0,
-          //         ),
-          //         child: child,
-          //   )
-          //   ,
-          // ),
-          Home(),
-          IgnorePointer(
-            ignoring: true,
-            child: Positioned.fill(
-              child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: _blurValue, sigmaY: _blurValue),
-                  child: Padding(
-                    padding: const EdgeInsets.all(32.0),
-                    child: Container(color: Colors.transparent),
-                    ),
-                  ),
-            ),
-          ),
-          // BackdropFilter(
-          //   filter: ImageFilter.blur(
-          //     sigmaX: 20.0,
-          //     sigmaY: 20.0,
-          //   ),
-          //   child: Home(),
-          // ),
-          GestureDetector(
-            onPanUpdate: (details) {
-              _offset = Offset(0, _offset.dy + details.delta.dy);
-              if (_offset.dy < _MyHomePageState._minHeight) {
-                _offset = Offset(0, _MyHomePageState._minHeight);
-                _isOpen = false;
-              } else if (_offset.dy > _MyHomePageState._maxHeight) {
-                _offset = Offset(0, _MyHomePageState._maxHeight);
-                _isOpen = true;
-              }
-              _blurValue = (_offset.dy - _minHeight) / (_maxHeight - _minHeight) * 20;
+      body: GestureDetector(
+        onPanUpdate: (details) {
+          _offset = Offset(0, _offset.dy + details.delta.dy);
+          if (_offset.dy < _MyHomePageState._minHeight) {
+            _offset = Offset(0, _MyHomePageState._minHeight);
+            _isOpen = false;
+          } else if (_offset.dy > _MyHomePageState._maxHeight) {
+            _offset = Offset(0, _MyHomePageState._maxHeight);
+            _isOpen = true;
+          }
 
-              setState(() {});
-            },
-            onPanEnd: _handlePanEnd,
-            child: AnimatedContainer(
+          _blurValue = (_offset.dy - _minHeight) / (_maxHeight - _minHeight) * 20;
+
+          double t = (_offset.dy - _minHeight) / (_maxHeight - _minHeight);
+          _opacity = sqrt(t);
+
+          setState(() {});
+        },
+        onPanEnd: _handlePanEnd,
+        child: Stack(
+
+          alignment: Alignment.topCenter,
+          children: [
+            Home(),
+            IgnorePointer(
+              ignoring: true,
+              child: Positioned.fill(
+                child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: _blurValue, sigmaY: _blurValue),
+                    child: Padding(
+                      padding: const EdgeInsets.all(32.0),
+                      child: Container(color: Colors.transparent),
+                      ),
+                    ),
+              ),
+            ),
+            AnimatedContainer(
               duration: Duration.zero,
               curve: Curves.easeOut,
               height: _offset.dy,
               alignment: Alignment.bottomCenter,
               decoration: BoxDecoration(
-                  color: Colors.transparent,
-                  borderRadius: BorderRadius.only(
+                border: Border.all(color: Colors.black.withOpacity(_opacity), width: 3, strokeAlign: BorderSide.strokeAlignOutside),
+                  color: Colors.white.withOpacity(_opacity),
+                  borderRadius: const BorderRadius.only(
                     bottomLeft: Radius.circular(30),
                     bottomRight: Radius.circular(30),
                   ),
                   boxShadow: [
-                    BoxShadow(color: Colors.grey.withOpacity(0.0), spreadRadius: 5, blurRadius: 10)
+                    BoxShadow(color: (Colors.grey[400])!.withOpacity(0), spreadRadius: 0, blurRadius: 0)
                   ]),
               child: CustomAppBar2(),
             ),
-          ),
-          SafeArea(child: Text(_offset.dy.toString())),
-        ],
+            SafeArea(child: Text(_offset.dy.toString())),
+          ],
+        ),
       ),
     );
   }
@@ -147,6 +137,7 @@ class _MyHomePageState extends State<HomePage> with SingleTickerProviderStateMix
         setState(() {
           _offset = Offset(0, _animation.value);
           _blurValue = (_offset.dy - _minHeight) / (_maxHeight - _minHeight) * 20;
+          _opacity = ((_offset.dy - _minHeight) / (_maxHeight - _minHeight));
         });
       });
   }
