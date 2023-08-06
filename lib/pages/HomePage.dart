@@ -45,7 +45,7 @@ class _MyHomePageState extends State<HomePage> with SingleTickerProviderStateMix
   Widget build(BuildContext context) {
     screenWidth = MediaQuery.of(context).size.width;
     screenHeight = MediaQuery.of(context).size.height;
-    // _maxHeight = MediaQuery.of(context).size.height;
+    _maxHeight = MediaQuery.of(context).size.height / 2;
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -81,7 +81,7 @@ class _MyHomePageState extends State<HomePage> with SingleTickerProviderStateMix
             ),
             CustomAppBar2(offset: _offset, opacity: _opacity, onChehClicked: openOrCloseMenu),
             MenuItems(offset: (_offset.dy - _minHeight) / (_maxHeight - _minHeight),),
-            SafeArea(child: Text(((_offset.dy - _minHeight) / (_maxHeight - _minHeight)).toString())),
+            // SafeArea(child: Text(((_offset.dy - _minHeight) / (_maxHeight - _minHeight)).toString())),
           ],
         ),
       ),

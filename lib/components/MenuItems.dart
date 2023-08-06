@@ -51,13 +51,13 @@ class _MenuItemsState extends State<MenuItems> {
       child: SafeArea(
         child: Padding(
           padding: const EdgeInsets.only(left: 32.0, right: 32.0, top: 20),
-          child: ListView.separated(
+          child: ListView.builder(
               physics: const NeverScrollableScrollPhysics(),
               itemCount: profil.length,
               itemBuilder: (context, index) {
                 return Container(
                   transform: Matrix4.translationValues(
-                     1000 - widget.offset * 1000 , 0, 0),
+                     0, - (300 - widget.offset * 300) , 0),
                   child: UserContainer(
                     name: profil[index][0],
                     iconPath: profil[index][1],
@@ -66,7 +66,7 @@ class _MenuItemsState extends State<MenuItems> {
                   ),
                 );
               },
-              separatorBuilder: (context, index) => const Divider(),// here u can customize the space.
+              // separatorBuilder: (context, index) => const Divider(),// here u can customize the space.
 
           ),
         ),

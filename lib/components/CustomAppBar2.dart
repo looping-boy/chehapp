@@ -1,6 +1,7 @@
-import 'package:chehapp/components/MenuItems.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+
 
 class CustomAppBar2 extends StatefulWidget implements PreferredSizeWidget {
   Offset offset;
@@ -17,7 +18,7 @@ class CustomAppBar2 extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _CustomAppBar2State extends State<CustomAppBar2> {
-  final double horizontalPadding = 40;
+  final double horizontalPadding = 35;
   final double verticalPadding = 25;
 
   double opacity = 0;
@@ -33,6 +34,24 @@ class _CustomAppBar2State extends State<CustomAppBar2> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) => animOpacity());
   }
+
+  final shadowLight = const TextStyle(shadows: [
+    BoxShadow(
+        blurRadius: 20.0,
+        offset: Offset(-10.0, -10.0),
+        color: Color(0x55ffffff)),
+    BoxShadow(
+        blurRadius: 20.0, offset: Offset(10.0, 10.0), color: Color(0x44000000))
+  ]);
+
+  final shadowStrong = const TextStyle(shadows: [
+    BoxShadow(
+        blurRadius: 20.0,
+        offset: Offset(-10.0, -10.0),
+        color: Color(0xffffffff)),
+    BoxShadow(
+        blurRadius: 20.0, offset: Offset(10.0, 10.0), color: Color(0xff000000))
+  ]);
 
   @override
   Widget build(BuildContext context) {
@@ -60,16 +79,35 @@ class _CustomAppBar2State extends State<CustomAppBar2> {
                     blurRadius: 0)
               ]),
           child: SafeArea(
+            bottom: true,
             child: SizedBox(
-              height: 80,
+              height: 92,
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          transform: Matrix4.translationValues(0.0, 10.0, 0.0),
+                          child: Text(
+                            "Welcome to the",
+                            style: shadowStrong
+                                .merge(TextStyle(fontSize: 20, color: Colors.grey[700])),
+                          ),
+                        ),
+                        Text(
+                          "CHEH APP",
+                          style:
+                          GoogleFonts.bebasNeue(fontSize: 72, textStyle: shadowLight),
+                        ),
+                      ],
+                    ),
                     Container(
-                      width: 75.0,
                       height: 75.0,
+                      alignment: Alignment.center,
                       child: Container(
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
@@ -81,8 +119,8 @@ class _CustomAppBar2State extends State<CustomAppBar2> {
                         child: GestureDetector(
                           onTap: widget.onChehClicked,
                           child: CircleAvatar(
-                            radius: 45,
-                            backgroundColor: Colors.grey[200],
+                            radius: 35,
+                            backgroundColor: Colors.transparent,
                             child: Padding(
                               padding: const EdgeInsets.only(top: 5.0),
                               child: AnimatedOpacity(
@@ -100,14 +138,14 @@ class _CustomAppBar2State extends State<CustomAppBar2> {
                         ),
                       ),
                     ),
-                    GestureDetector(
-                      onTap: widget.onChehClicked,
-                      child: Icon(
-                        Icons.person,
-                        size: 45,
-                        color: Colors.grey[900],
-                      ),
-                    ),
+                    // GestureDetector(
+                    //   onTap: widget.onChehClicked,
+                    //   child: Icon(
+                    //     Icons.person,
+                    //     size: 45,
+                    //     color: Colors.grey[900],
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
