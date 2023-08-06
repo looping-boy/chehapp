@@ -1,7 +1,9 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../utils/Globals.dart';
 import 'MainPage.dart';
 import 'SendChat.dart';
 import 'SnakeGame.dart';
@@ -43,6 +45,9 @@ class GradientTween extends Tween<Gradient> {
 }
 
 class Home extends StatefulWidget {
+
+  Home({super.key});
+
   @override
   HomeState createState() {
     return HomeState();
@@ -55,15 +60,31 @@ class HomeState extends State<Home> {
 
   Color colorGradient = Colors.blue[400]!;
 
+  double _currentPage = 0;
+
+
   @override
   void initState() {
-    _initialize();
     super.initState();
-  }
-
-  void _initialize() {
     setBackground();
     pageController = PageController();
+    WidgetsBinding.instance.addPostFrameCallback((_) => initializePageView());
+  }
+
+  void initializePageView() {
+    _currentPage = 0;
+    pageController.addListener(() {
+      setState(() {
+        _currentPage = pageController.page!;
+      });
+
+      if (_currentPage < 0.5) {
+        context.read<Globals>().setPageName("Cheh App");
+      } else {
+        context.read<Globals>().setPageName(pageName);
+      }
+
+    });
   }
 
   void setBackground() {
@@ -105,23 +126,28 @@ class HomeState extends State<Home> {
   @override
   void reassemble() {
     pageController.dispose();
-    _initialize();
+    setBackground();
+    pageController = PageController();
     super.reassemble();
   }
 
   Widget nextPage = const SendChat();
+
+  String pageName = "Cheh Room";
 
   void buttonIndexChange(int buttonIndex) {
     if (buttonIndex == 0) {
       setState(() {
         colorGradient = Colors.blue[400]!;
         nextPage = const SendChat();
+        pageName = "Cheh Room";
         setBackground();
       });
     } else if (buttonIndex == 1) {
       setState(() {
         colorGradient = Colors.green[400]!;
         nextPage = const SnakeGame();
+        pageName = "Cheh Snake";
         setBackground();
       });
     }
@@ -130,12 +156,13 @@ class HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       body: AnimatedBuilder(
         animation: pageController,
         builder: (context, child) {
-          final color =
-              pageController.hasClients ? pageController.page! / 3 : .0;
+
+          final color = pageController.hasClients ? pageController.page! / 3 : .0;
 
           return DecoratedBox(
             decoration: BoxDecoration(

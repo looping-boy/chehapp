@@ -7,8 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_carousel_slider/carousel_slider.dart';
 import '../components/CustomAppBar2.dart';
 import '../components/MenuItems.dart';
+import '../utils/Globals.dart';
 import 'Home.dart';
 import 'dart:ui';
+import 'package:provider/provider.dart';
+
 import 'MainPage.dart';
 import 'dart:developer' as developer;
 
@@ -47,42 +50,45 @@ class _MyHomePageState extends State<HomePage> with SingleTickerProviderStateMix
     screenHeight = MediaQuery.of(context).size.height;
     _maxHeight = MediaQuery.of(context).size.height / 2;
 
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: GestureDetector(
-        onPanUpdate: (details) {
-          _offset = Offset(0, _offset.dy + details.delta.dy);
-          if (_offset.dy < _MyHomePageState._minHeight) {
-            _offset = Offset(0, _MyHomePageState._minHeight);
-          } else if (_offset.dy > _MyHomePageState._maxHeight) {
-            _offset = Offset(0, _MyHomePageState._maxHeight);
-          }
+    return ListenableProvider(
+      create: (_) => Globals(),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: GestureDetector(
+          onPanUpdate: (details) {
+            _offset = Offset(0, _offset.dy + details.delta.dy);
+            if (_offset.dy < _MyHomePageState._minHeight) {
+              _offset = Offset(0, _MyHomePageState._minHeight);
+            } else if (_offset.dy > _MyHomePageState._maxHeight) {
+              _offset = Offset(0, _MyHomePageState._maxHeight);
+            }
 
-          changeBlurAndOpacity();
+            changeBlurAndOpacity();
 
-          setState(() {});
-        },
-        onPanEnd: _handlePanEnd,
-        child: Stack(
-          alignment: Alignment.topCenter,
-          children: [
-            Home(),
-            IgnorePointer(
-              ignoring: true,
-              child: Positioned.fill(
-                child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: _blurValue, sigmaY: _blurValue),
-                    child: Padding(
-                      padding: const EdgeInsets.all(32.0),
-                      child: Container(color: Colors.transparent),
+            setState(() {});
+          },
+          onPanEnd: _handlePanEnd,
+          child: Stack(
+            alignment: Alignment.topCenter,
+            children: [
+              Home(),
+              IgnorePointer(
+                ignoring: true,
+                child: Positioned.fill(
+                  child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: _blurValue, sigmaY: _blurValue),
+                      child: Padding(
+                        padding: const EdgeInsets.all(32.0),
+                        child: Container(color: Colors.transparent),
+                        ),
                       ),
-                    ),
+                ),
               ),
-            ),
-            CustomAppBar2(offset: _offset, opacity: _opacity, onChehClicked: openOrCloseMenu),
-            MenuItems(offset: (_offset.dy - _minHeight) / (_maxHeight - _minHeight),),
-            // SafeArea(child: Text(((_offset.dy - _minHeight) / (_maxHeight - _minHeight)).toString())),
-          ],
+              CustomAppBar2(offset: _offset, opacity: _opacity, onChehClicked: openOrCloseMenu),
+              MenuItems(offset: (_offset.dy - _minHeight) / (_maxHeight - _minHeight),),
+              // SafeArea(child: Text(((_offset.dy - _minHeight) / (_maxHeight - _minHeight)).toString())),
+            ],
+          ),
         ),
       ),
     );

@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+
+import '../utils/Globals.dart';
 
 
 class CustomAppBar2 extends StatefulWidget implements PreferredSizeWidget {
@@ -55,6 +58,9 @@ class _CustomAppBar2State extends State<CustomAppBar2> {
 
   @override
   Widget build(BuildContext context) {
+
+    final globals = Provider.of<Globals>(context);
+
     return Stack(
       children: [
         AnimatedContainer(
@@ -99,7 +105,7 @@ class _CustomAppBar2State extends State<CustomAppBar2> {
                           ),
                         ),
                         Text(
-                          "CHEH APP",
+                          context.watch<Globals>().pageName,
                           style:
                           GoogleFonts.bebasNeue(fontSize: 72, textStyle: shadowLight),
                         ),
@@ -120,7 +126,7 @@ class _CustomAppBar2State extends State<CustomAppBar2> {
                           onTap: widget.onChehClicked,
                           child: CircleAvatar(
                             radius: 35,
-                            backgroundColor: Colors.transparent,
+                            backgroundColor: (Colors.grey[300])!.withOpacity(opacity),
                             child: Padding(
                               padding: const EdgeInsets.only(top: 5.0),
                               child: AnimatedOpacity(
