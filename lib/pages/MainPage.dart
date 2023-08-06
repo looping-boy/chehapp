@@ -51,14 +51,12 @@ class _MainPageState extends State<MainPage>
         blurRadius: 20.0, offset: Offset(10.0, 10.0), color: Color(0xff000000))
   ]);
 
-  Alignment align = const Alignment(20, 0);
   bool startAnimation = false;
   double screenWidth = 0;
 
   void animTitle() {
-    setState(() {
-      align = Alignment.centerLeft;
-    });
+    Future.delayed(const Duration(milliseconds: 150), () {
+    animWalkie();
     Future.delayed(const Duration(milliseconds: 150), () {
       animBar();
       Future.delayed(const Duration(milliseconds: 150), () {
@@ -70,10 +68,17 @@ class _MainPageState extends State<MainPage>
         });
       });
     });
+    });
+  }
+
+  bool animWalke = false;
+  void animWalkie() {
+    setState(() {
+      animWalke = true;
+    });
   }
 
   Alignment alignBar = const Alignment(20, 0);
-
   void animBar() {
     setState(() {
       alignBar = Alignment.centerLeft;
@@ -81,7 +86,6 @@ class _MainPageState extends State<MainPage>
   }
 
   Alignment alignText = const Alignment(20, 0);
-
   void animText() {
     setState(() {
       alignText = Alignment.centerLeft;
@@ -101,15 +105,17 @@ class _MainPageState extends State<MainPage>
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           AnimatedContainer(
-            alignment: align,
+            alignment: Alignment.centerLeft,
             onEnd: () => {},
             duration: const Duration(milliseconds: 300),
+            transform: Matrix4.translationValues(animWalke ? 0 : screenWidth, 0, 0),
             curve: Curves.decelerate,
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  const SizedBox(height: 20),
                   Text(
                     "Try our new features below :",
                     style: TextStyle(
@@ -118,22 +124,71 @@ class _MainPageState extends State<MainPage>
                       color: Colors.grey[900],
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 0.0, vertical: 10.0),
-                      child: Table(
-                        defaultVerticalAlignment:
-                            TableCellVerticalAlignment.middle,
-                        columnWidths: const {
-                          0: FractionColumnWidth(.6),
-                          1: FractionColumnWidth(.1),
-                          2: FractionColumnWidth(.3),
-                        },
-                        children: [
-                          TableRow(children: [
-                            GestureDetector(
+                  const SizedBox(height: 8.0),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 0.0, vertical: 10.0),
+                    child: Table(
+                      defaultVerticalAlignment:
+                          TableCellVerticalAlignment.middle,
+                      columnWidths: const {
+                        0: FractionColumnWidth(.6),
+                        1: FractionColumnWidth(.1),
+                        2: FractionColumnWidth(.3),
+                      },
+                      children: [
+                        TableRow(children: [
+                          GestureDetector(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  // boxShadow: shadow,
+                                  border: Border.all(
+                                      color: (Colors.grey[800])!, width: 4),
+                                  color: Colors.grey[200],
+                                  borderRadius: BorderRadius.circular(24)),
+                              padding: const EdgeInsets.symmetric(vertical: 6),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8.0, vertical: 6.0),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                          color: Colors.grey[900]!,
+                                          width: 4.0,
+                                        ),
+                                      ),
+                                      child: ClipOval(
+                                        child: CircleAvatar(
+                                          radius: 20,
+                                          backgroundColor: Colors.grey[200],
+                                          backgroundImage: const AssetImage(
+                                            "lib/icons/walkie.png",
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    const Padding(
+                                      padding: EdgeInsets.only(left: 8.0),
+                                      child: Text(
+                                        "Walkie",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20,
+                                            color: Colors.black),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          Container(),
+                          TableCell(
+                            verticalAlignment: TableCellVerticalAlignment.fill,
+                            child: GestureDetector(
                               child: Container(
                                 decoration: BoxDecoration(
                                     // boxShadow: shadow,
@@ -141,77 +196,28 @@ class _MainPageState extends State<MainPage>
                                         color: (Colors.grey[800])!, width: 4),
                                     color: Colors.grey[200],
                                     borderRadius: BorderRadius.circular(24)),
-                                padding: const EdgeInsets.symmetric(vertical: 6),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0, vertical: 6.0),
-                                  child: Row(
-                                    children: [
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          border: Border.all(
-                                            color: Colors.grey[900]!,
-                                            width: 4.0,
-                                          ),
-                                        ),
-                                        child: ClipOval(
-                                          child: CircleAvatar(
-                                            radius: 20,
-                                            backgroundColor: Colors.grey[200],
-                                            backgroundImage: const AssetImage(
-                                              "lib/icons/walkie.png",
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      const Padding(
-                                        padding: EdgeInsets.only(left: 8.0),
-                                        child: Text(
-                                          "Walkie",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 20,
-                                              color: Colors.black),
-                                        ),
-                                      ),
-                                    ],
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 6),
+                                child: const Center(
+                                  child: Text(
+                                    textAlign: TextAlign.center,
+                                    maxLines: 2,
+                                    "Push To Talk",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20,
+                                        color: Colors.black),
                                   ),
                                 ),
                               ),
                             ),
-                            Container(),
-                            TableCell(
-                              verticalAlignment: TableCellVerticalAlignment.fill,
-                              child: GestureDetector(
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      // boxShadow: shadow,
-                                      border: Border.all(
-                                          color: (Colors.grey[800])!, width: 4),
-                                      color: Colors.grey[200],
-                                      borderRadius: BorderRadius.circular(24)),
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 6),
-                                  child: Center(
-                                    child: Text(
-                                      textAlign: TextAlign.center,
-                                      maxLines: 2,
-                                      "Push To Talk",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20,
-                                          color: Colors.black),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ])
-                        ],
-                      ),
+                          ),
+                        ])
+                      ],
                     ),
-                  )
+                  ),
+                  const SizedBox(height: 8.0),
+
                 ],
               ),
             ),

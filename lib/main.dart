@@ -1,10 +1,16 @@
 
 import 'package:chehapp/pages/SplashScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 
 
 void main() {
+  // SET STATUS BAR ICONS COLOR :
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarBrightness: Brightness.light,
+      statusBarIconBrightness: Brightness.light
+  ));
   runApp(const ChehApp());
 }
 

@@ -1,17 +1,21 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../utils/Globals.dart';
-
 
 class CustomAppBar2 extends StatefulWidget implements PreferredSizeWidget {
   Offset offset;
   double opacity;
   void Function() onChehClicked;
 
-  CustomAppBar2({super.key, required this.offset, required this.opacity, required this.onChehClicked});
+  CustomAppBar2(
+      {super.key,
+      required this.offset,
+      required this.opacity,
+      required this.onChehClicked});
 
   @override
   State<CustomAppBar2> createState() => _CustomAppBar2State();
@@ -25,6 +29,9 @@ class _CustomAppBar2State extends State<CustomAppBar2> {
   final double verticalPadding = 25;
 
   double opacity = 0;
+  bool startAnimation = false;
+  bool blockedAnimation = false;
+  final int animDelay = 300;
 
   void animOpacity() {
     setState(() {
@@ -35,7 +42,17 @@ class _CustomAppBar2State extends State<CustomAppBar2> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => animOpacity());
+    WidgetsBinding.instance.addPostFrameCallback((_) => {
+      animOpacity(),
+      setState(() {
+        startAnimation = true;
+      }),
+    Future.delayed(Duration(milliseconds: animDelay), () {
+      setState(() {
+        blockedAnimation = true;
+      });
+      })
+    });
   }
 
   final shadowLight = const TextStyle(shadows: [
@@ -56,18 +73,20 @@ class _CustomAppBar2State extends State<CustomAppBar2> {
         blurRadius: 20.0, offset: Offset(10.0, 10.0), color: Color(0xff000000))
   ]);
 
+
+
   @override
   Widget build(BuildContext context) {
-
     final globals = Provider.of<Globals>(context);
+    final screenWidth = MediaQuery.of(context).size.width;
 
-    return Stack(
-      children: [
-        AnimatedContainer(
-          duration: Duration.zero,
+    return Stack(children: [
+      AnimatedContainer(
+          duration: blockedAnimation ? Duration.zero : Duration(milliseconds: animDelay),
           curve: Curves.easeOut,
           height: widget.offset.dy,
           alignment: Alignment.bottomCenter,
+          transform: Matrix4.translationValues(startAnimation ? 0 : screenWidth, 0, 0),
           decoration: BoxDecoration(
               border: Border.all(
                   color: Colors.black.withOpacity(widget.opacity),
@@ -100,14 +119,14 @@ class _CustomAppBar2State extends State<CustomAppBar2> {
                           transform: Matrix4.translationValues(0.0, 10.0, 0.0),
                           child: Text(
                             "Welcome to the",
-                            style: shadowStrong
-                                .merge(TextStyle(fontSize: 20, color: Colors.grey[700])),
+                            style: shadowStrong.merge(TextStyle(
+                                fontSize: 20, color: Colors.grey[700])),
                           ),
                         ),
                         Text(
                           context.watch<Globals>().pageName,
-                          style:
-                          GoogleFonts.bebasNeue(fontSize: 72, textStyle: shadowLight),
+                          style: GoogleFonts.bebasNeue(
+                              fontSize: 72, textStyle: shadowLight),
                         ),
                       ],
                     ),
@@ -126,7 +145,8 @@ class _CustomAppBar2State extends State<CustomAppBar2> {
                           onTap: widget.onChehClicked,
                           child: CircleAvatar(
                             radius: 35,
-                            backgroundColor: (Colors.grey[300])!.withOpacity(opacity),
+                            backgroundColor:
+                                (Colors.grey[300])!.withOpacity(opacity),
                             child: Padding(
                               padding: const EdgeInsets.only(top: 5.0),
                               child: AnimatedOpacity(
@@ -144,22 +164,11 @@ class _CustomAppBar2State extends State<CustomAppBar2> {
                         ),
                       ),
                     ),
-                    // GestureDetector(
-                    //   onTap: widget.onChehClicked,
-                    //   child: Icon(
-                    //     Icons.person,
-                    //     size: 45,
-                    //     color: Colors.grey[900],
-                    //   ),
-                    // ),
                   ],
                 ),
               ),
             ),
-          )
-        ),
-
-      ]
-    );
+          )),
+    ]);
   }
 }

@@ -47,38 +47,27 @@ class _SendChatState extends State<SendChat> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 32.0, right: 32.0, top: 210),
+      padding: const EdgeInsets.only(left: 32.0, right: 32.0, top: 170),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
+
+          const SizedBox(height: 20),
           Text(
-            "Cheh Room",
-            style:
-                GoogleFonts.bebasNeue(fontSize: 72, textStyle: shadowLight)
-                    .merge(TextStyle()),
-          ),
-          const SizedBox(height: 10),
-          Padding(
-            padding:
-            EdgeInsets.fromLTRB(4, 0, 0, 8.0),
-            child: AnimatedContainer(
-              alignment: Alignment.centerLeft,
-              onEnd: () => {},
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.decelerate,
-              child: Container(
-                height: 2.0,
-                width: 250.0,
-                color: Colors.black,
-              ),
+            "Send Cheh to them :",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 24,
+              color: Colors.grey[900],
             ),
           ),
-
+          const SizedBox(height: 8.0),
           SizedBox(
-            height: 400,
+            height: 500,
             child: ListView.builder(
+                  padding: EdgeInsets.zero,
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: users.length,
                   itemBuilder: (context, index) {

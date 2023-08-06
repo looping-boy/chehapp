@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../utils/Globals.dart';
@@ -156,7 +157,7 @@ class HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    
+
     return Scaffold(
       body: AnimatedBuilder(
         animation: pageController,
