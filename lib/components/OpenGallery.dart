@@ -40,13 +40,7 @@ class _OpenGalleryState extends State<OpenGallery> {
     }
   }
 
-  void _handleLostFiles(List<XFile> files) {
 
-  }
-
-  void _handleError(PlatformException? e) {
-
-  }
 
 }
 

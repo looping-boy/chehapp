@@ -72,9 +72,9 @@ class _MyHomePageState extends State<HomePage> with SingleTickerProviderStateMix
             alignment: Alignment.topCenter,
             children: [
               Home(),
-              IgnorePointer(
-                ignoring: true,
-                child: Positioned.fill(
+              Positioned.fill(
+                child: IgnorePointer(
+                  ignoring: true,
                   child: BackdropFilter(
                       filter: ImageFilter.blur(sigmaX: _blurValue, sigmaY: _blurValue),
                       child: Padding(

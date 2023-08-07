@@ -33,6 +33,17 @@ class _MainPageState extends State<MainPage>
     });
   }
 
+  final shadow = [
+    const BoxShadow(
+        blurRadius: 20.0,
+        offset: Offset(-10.0, -10.0),
+        color: Color(0x77ffffff)),
+    const BoxShadow(
+        blurRadius: 20.0,
+        offset: Offset(10.0, 10.0),
+        color: Color(0x33000000))
+  ];
+
   final shadowLight = const TextStyle(shadows: [
     BoxShadow(
         blurRadius: 20.0,
@@ -141,7 +152,7 @@ class _MainPageState extends State<MainPage>
                           GestureDetector(
                             child: Container(
                               decoration: BoxDecoration(
-                                  // boxShadow: shadow,
+                                  boxShadow: shadow,
                                   border: Border.all(
                                       color: (Colors.grey[800])!, width: 4),
                                   color: Colors.grey[200],
@@ -161,11 +172,14 @@ class _MainPageState extends State<MainPage>
                                         ),
                                       ),
                                       child: ClipOval(
-                                        child: CircleAvatar(
-                                          radius: 20,
-                                          backgroundColor: Colors.grey[200],
-                                          backgroundImage: const AssetImage(
-                                            "lib/icons/walkie.png",
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: CircleAvatar(
+                                            radius: 18,
+                                            backgroundColor: Colors.grey[200],
+                                            backgroundImage: const AssetImage(
+                                              "lib/icons/walkie.png",
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -191,7 +205,7 @@ class _MainPageState extends State<MainPage>
                             child: GestureDetector(
                               child: Container(
                                 decoration: BoxDecoration(
-                                    // boxShadow: shadow,
+                                    boxShadow: shadow,
                                     border: Border.all(
                                         color: (Colors.grey[800])!, width: 4),
                                     color: Colors.grey[200],
