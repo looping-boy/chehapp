@@ -4,10 +4,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
 class MenuItems extends StatefulWidget {
   double offset;
+
   MenuItems({super.key, required this.offset});
 
   @override
@@ -45,149 +47,280 @@ class _MenuItemsState extends State<MenuItems> {
     ["Thara", "lib/icons/thara.jpeg", true],
   ];
 
+  File? _image;
+  final imageHelper = ImageHelper();
+
   @override
   Widget build(BuildContext context) {
     return IgnorePointer(
       ignoring: false,
       child: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.only(left: 32.0, right: 32.0, top: 20),
-          child: Container(
-                  transform: Matrix4.translationValues(
-                     0, - (300 - widget.offset * 300) , 0),
-                  child: Column(
-                    children: [
-                      GestureDetector(
-                        onTap: _getFromGallery,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 10.0),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              // boxShadow: shadow,
-                                border: Border.all(color: (Colors.grey[800])!, width: 4),
-                                color: Colors.grey[200],
-                                borderRadius: BorderRadius.circular(24)),
-                            padding: const EdgeInsets.symmetric(vertical: 6),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6.0),
-                              child: Row(
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      border: Border.all(
-                                        color: (Colors.grey[900])!,
-                                        width: 4.0,
-                                      ),
+            padding: const EdgeInsets.only(left: 32.0, right: 32.0, top: 20),
+            child: Container(
+                transform: Matrix4.translationValues(
+                    0, -(300 - widget.offset * 300), 0),
+                child: Column(
+                  children: [
+                    GestureDetector(
+                      onTap: () async {
+                        final files = await imageHelper.pickImage();
+                        if (files.isNotEmpty) {
+                          final croppedFile = await imageHelper.crop(
+                              file: files.first!,
+                            cropStyle: CropStyle.circle
+                          );
+                          if (croppedFile != null) {
+                            setState(() => _image = File(croppedFile.path));
+                          }
+                        }
+                        },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 0.0, vertical: 10.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            // boxShadow: shadow,
+                              border: Border.all(
+                                  color: (Colors.grey[800])!, width: 4),
+                              color: Colors.grey[200],
+                              borderRadius: BorderRadius.circular(24)),
+                          padding: const EdgeInsets.symmetric(vertical: 6),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8.0, vertical: 6.0),
+                            child: Row(
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                      color: (Colors.grey[900])!,
+                                      width: 4.0,
                                     ),
+                                  ),
+                                  child: CircleAvatar(
+                                    radius: 20,
+                                    // backgroundColor: Colors.grey[200],
+                                    foregroundImage: _image != null ? FileImage(_image!) : null,
+                                    // child: Padding(
+                                    //   padding: const EdgeInsets.only(top: 5.0),
+                                    //   child: Image.asset(
+                                    //     "lib/icons/profile2.JPG",
+                                    //     height: 30,
+                                    //     color: Colors.grey[900],
+                                    //   ),
+                                    // ),
+                                  ),
+                                ),
+                                const Expanded(
+                                    child: Padding(
+                                      padding: EdgeInsets.only(left: 8.0),
+                                      child: Text(
+                                        textAlign: TextAlign.center,
+                                        maxLines: 2,
+                                        "Change your picture for the game",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20,
+                                            color: Colors.black),
+                                      ),
+                                    )),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () => {},
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 0.0, vertical: 10.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            // boxShadow: shadow,
+                              border: Border.all(
+                                  color: (Colors.grey[800])!, width: 4),
+                              color: Colors.grey[200],
+                              borderRadius: BorderRadius.circular(24)),
+                          padding: const EdgeInsets.symmetric(vertical: 6),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8.0, vertical: 6.0),
+                            child: Row(
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                      color: Colors.grey[900]!,
+                                      width: 4.0,
+                                    ),
+                                  ),
+                                  child: ClipOval(
                                     child: CircleAvatar(
                                       radius: 20,
                                       backgroundColor: Colors.grey[200],
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(top: 5.0),
-                                        child: image != null ? Image.file(image!, width: 160, height: 160, fit: BoxFit.cover,) : Image.asset(
-                                          "lib/icons/profile2.JPG",
-                                          height: 30,
-                                          color: Colors.grey[900],
-                                        ),
-                                      ),
+                                      backgroundImage:
+                                      AssetImage("lib/icons/micro.png"),
                                     ),
                                   ),
-                                  const Expanded(
-                                      child: Padding(
-                                        padding: EdgeInsets.only(left: 8.0),
-                                        child: Text(
-                                          textAlign: TextAlign.center,
-                                          maxLines: 2,
-                                          "Change your picture",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 20,
-                                              color: Colors.black),
-                                        ),
-                                      )),
-                                ],
-                              ),
+                                ),
+                                const Expanded(
+                                    child: Padding(
+                                      padding: EdgeInsets.only(left: 8.0),
+                                      child: Text(
+                                        textAlign: TextAlign.center,
+                                        maxLines: 2,
+                                        "Tap to record a 1 second onomatopoeia !",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20,
+                                            color: Colors.black),
+                                      ),
+                                    )),
+                              ],
                             ),
                           ),
                         ),
                       ),
-                      GestureDetector(
-                        onTap: () => {},
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 10.0),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              // boxShadow: shadow,
-                                border: Border.all(color: (Colors.grey[800])!, width: 4),
-                                color: Colors.grey[200],
-                                borderRadius: BorderRadius.circular(24)),
-                            padding: const EdgeInsets.symmetric(vertical: 6),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6.0),
-                              child: Row(
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      border: Border.all(
-                                        color: Colors.grey[900]!,
-                                        width: 4.0,
-                                      ),
-                                    ),
-                                    child: ClipOval(
-                                      child: CircleAvatar(
-                                        radius: 20,
-                                        backgroundColor: Colors.grey[200],
-                                        backgroundImage: AssetImage("lib/icons/micro.png"),
-                                      ),
-                                    ),
-                                  ),
-                                  const Expanded(
-                                      child: Padding(
-                                        padding: EdgeInsets.only(left: 8.0),
-                                        child: Text(
-                                          textAlign: TextAlign.center,
-                                          maxLines: 2,
-                                          "Tap to record a 1 second onomatopoeia !",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 20,
-                                              color: Colors.black),
-                                        ),
-                                      )),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-
-
-
-
-                    ],
-                  )
-                )
-        ),
+                    ),
+                  ],
+                ))),
       ),
     );
   }
+}
+//   File? image;
+//
+//   /// Get from gallery
+//   Future<void> _getFromGallery() async {
+//     try {
+//       final ImagePicker picker = ImagePicker();
+//       final pickedFile =
+//           await picker.pickImage(source: ImageSource.gallery, imageQuality: 10);
+//       if (pickedFile == null) return [];
+//
+//       final imageTemporary = File(pickedFile.path);
+//       setState(() => image = imageTemporary);
+//     } on PlatformException catch (e) {
+//       print("failed to import");
+//     }
+//
+//     Future<CroppedFile?> crop(
+//             {required XFile file,
+//             CropStyle cropStyle = CropStyle.circle}) async =>
+//         await ImageCropper().cropImage(
+//           sourcePath: image.path,
+//           aspectRatioPresets: [
+//             CropAspectRatioPreset.square,
+//             CropAspectRatioPreset.ratio3x2,
+//             CropAspectRatioPreset.original,
+//             CropAspectRatioPreset.ratio4x3,
+//             CropAspectRatioPreset.ratio16x9
+//           ],
+//           uiSettings: [
+//             AndroidUiSettings(
+//                 toolbarTitle: 'Cropper',
+//                 toolbarColor: Colors.deepOrange,
+//                 toolbarWidgetColor: Colors.white,
+//                 initAspectRatio: CropAspectRatioPreset.original,
+//                 lockAspectRatio: false),
+//             IOSUiSettings(
+//               title: 'Cropper',
+//             ),
+//             WebUiSettings(
+//               context: context,
+//             ),
+//           ],
+//         );
+//
+//     var decodedImage =
+//         await decodeImageFromList(File(images!.path).readAsBytesSync());
+//     print(decodedImage.width);
+//     print(decodedImage.height);
+//
+//     var cropSize = min(decodedImage.width, decodedImage.height);
+//     int offsetX =
+//         (decodedImage.width - min(decodedImage.width, decodedImage.height)) ~/
+//             2;
+//     int offsetY =
+//         (decodedImage.height - min(decodedImage.width, decodedImage.height)) ~/
+//             2;
+//
+//     final imageBytes = decodeImage(File(images!.path).readAsBytesSync())!;
+//
+//     img.Image cropOne = img.copyCrop(
+//       imageBytes,
+//       offsetX,
+//       offsetY,
+//       cropSize,
+//       cropSize,
+//     );
+//     print(cropOne.height);
+//     print(cropOne.width);
+//
+//     File(images!.path).writeAsBytes(encodePng(cropOne));
+//   }
+// }
 
-  File? image;
+class ImageHelper {
+  ImageHelper({
+    ImagePicker? imagePicker,
+    ImageCropper? imageCropper,
+  })  : _imagePicker = imagePicker ?? ImagePicker(),
+        _imageCropper = imageCropper ?? ImageCropper();
 
-  /// Get from gallery
-  Future<void> _getFromGallery() async {
-    try {
-      final ImagePicker picker = ImagePicker();
-      final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-      if (pickedFile == null) return;
+  final ImagePicker _imagePicker;
+  final ImageCropper _imageCropper;
 
-      final imageTemporary = File(pickedFile.path);
-      setState(() => image = imageTemporary);
-    } on PlatformException catch (e) {
-      print("failed to import");
+  Future<List<XFile?>> pickImage({
+    ImageSource source = ImageSource.gallery,
+    int imageQuality = 10,
+    bool multiple = false,
+  }) async {
+    if (multiple) {
+      return await _imagePicker.pickMultiImage(imageQuality: imageQuality);
     }
+
+    final file = await _imagePicker.pickImage(
+      source: source,
+      imageQuality: imageQuality,
+    );
+
+    if (file != null) return [file];
+    return [];
   }
 
+  Future<CroppedFile?> crop(
+      {required XFile file, CropStyle cropStyle = CropStyle.circle}) async {
+    return await ImageCropper().cropImage(
+      cropStyle: cropStyle,
+      sourcePath: file.path,
+      // aspectRatioPresets: [
+      //   CropAspectRatioPreset.square,
+      //   // CropAspectRatioPreset.ratio3x2,
+      //   // CropAspectRatioPreset.original,
+      //   // CropAspectRatioPreset.ratio4x3,
+      //   // CropAspectRatioPreset.ratio16x9
+      // ],
+      compressQuality: 10,
+      compressFormat: ImageCompressFormat.png,
+      uiSettings: [
+        AndroidUiSettings(
+            toolbarTitle: 'Cropper',
+            toolbarColor: Colors.deepOrange,
+            toolbarWidgetColor: Colors.white,
+            initAspectRatio: CropAspectRatioPreset.original,
+            lockAspectRatio: false),
+        IOSUiSettings(
+          title: 'Cropper',
+        ),
+      //   WebUiSettings(
+      //     context: context,
+      //   ),
+      ],
+    );
+  }
 }
