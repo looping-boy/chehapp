@@ -305,7 +305,7 @@ class ImageHelper {
       //   // CropAspectRatioPreset.ratio4x3,
       //   // CropAspectRatioPreset.ratio16x9
       // ],
-      compressQuality: 10,
+      compressQuality: 10, 
       compressFormat: ImageCompressFormat.png,
       uiSettings: [
         AndroidUiSettings(
