@@ -6,6 +6,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
+
+import '../utils/Globals.dart';
 
 class MenuItems extends StatefulWidget {
   double offset;
@@ -72,6 +75,7 @@ class _MenuItemsState extends State<MenuItems> {
                           );
                           if (croppedFile != null) {
                             setState(() => _image = File(croppedFile.path));
+                            context.read<Globals>().setAvatarFile(File(croppedFile.path));
                           }
                         }
                         },
@@ -192,78 +196,7 @@ class _MenuItemsState extends State<MenuItems> {
     );
   }
 }
-//   File? image;
-//
-//   /// Get from gallery
-//   Future<void> _getFromGallery() async {
-//     try {
-//       final ImagePicker picker = ImagePicker();
-//       final pickedFile =
-//           await picker.pickImage(source: ImageSource.gallery, imageQuality: 10);
-//       if (pickedFile == null) return [];
-//
-//       final imageTemporary = File(pickedFile.path);
-//       setState(() => image = imageTemporary);
-//     } on PlatformException catch (e) {
-//       print("failed to import");
-//     }
-//
-//     Future<CroppedFile?> crop(
-//             {required XFile file,
-//             CropStyle cropStyle = CropStyle.circle}) async =>
-//         await ImageCropper().cropImage(
-//           sourcePath: image.path,
-//           aspectRatioPresets: [
-//             CropAspectRatioPreset.square,
-//             CropAspectRatioPreset.ratio3x2,
-//             CropAspectRatioPreset.original,
-//             CropAspectRatioPreset.ratio4x3,
-//             CropAspectRatioPreset.ratio16x9
-//           ],
-//           uiSettings: [
-//             AndroidUiSettings(
-//                 toolbarTitle: 'Cropper',
-//                 toolbarColor: Colors.deepOrange,
-//                 toolbarWidgetColor: Colors.white,
-//                 initAspectRatio: CropAspectRatioPreset.original,
-//                 lockAspectRatio: false),
-//             IOSUiSettings(
-//               title: 'Cropper',
-//             ),
-//             WebUiSettings(
-//               context: context,
-//             ),
-//           ],
-//         );
-//
-//     var decodedImage =
-//         await decodeImageFromList(File(images!.path).readAsBytesSync());
-//     print(decodedImage.width);
-//     print(decodedImage.height);
-//
-//     var cropSize = min(decodedImage.width, decodedImage.height);
-//     int offsetX =
-//         (decodedImage.width - min(decodedImage.width, decodedImage.height)) ~/
-//             2;
-//     int offsetY =
-//         (decodedImage.height - min(decodedImage.width, decodedImage.height)) ~/
-//             2;
-//
-//     final imageBytes = decodeImage(File(images!.path).readAsBytesSync())!;
-//
-//     img.Image cropOne = img.copyCrop(
-//       imageBytes,
-//       offsetX,
-//       offsetY,
-//       cropSize,
-//       cropSize,
-//     );
-//     print(cropOne.height);
-//     print(cropOne.width);
-//
-//     File(images!.path).writeAsBytes(encodePng(cropOne));
-//   }
-// }
+
 
 class ImageHelper {
   ImageHelper({
@@ -305,7 +238,7 @@ class ImageHelper {
       //   // CropAspectRatioPreset.ratio4x3,
       //   // CropAspectRatioPreset.ratio16x9
       // ],
-      compressQuality: 10, 
+      compressQuality: 10,
       compressFormat: ImageCompressFormat.png,
       uiSettings: [
         AndroidUiSettings(
