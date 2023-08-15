@@ -9,6 +9,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../utils/Globals.dart';
+import 'DisplayPictureScreen.dart';
 
 class MenuItems extends StatefulWidget {
   double offset;
@@ -24,6 +25,16 @@ class _MenuItemsState extends State<MenuItems> {
 
   bool startAnimation = false;
   double screenWidth = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => setImage());
+  }
+
+  Future<void> setImage() async {
+      setState(() {_image = context.read<Globals>().avatarFile;});
+  }
 
   final shadowLight = const TextStyle(shadows: [
     BoxShadow(
@@ -70,21 +81,19 @@ class _MenuItemsState extends State<MenuItems> {
                         final files = await imageHelper.pickImage();
                         if (files.isNotEmpty) {
                           final croppedFile = await imageHelper.crop(
-                              file: files.first!,
-                            cropStyle: CropStyle.circle
-                          );
+                              file: files.first!, cropStyle: CropStyle.circle);
                           if (croppedFile != null) {
                             setState(() => _image = File(croppedFile.path));
-                            context.read<Globals>().setAvatarFile(File(croppedFile.path));
+                            context.read<Globals>().setAvatarFile(_image);
                           }
                         }
-                        },
+                      },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 0.0, vertical: 10.0),
                         child: Container(
                           decoration: BoxDecoration(
-                            // boxShadow: shadow,
+                              // boxShadow: shadow,
                               border: Border.all(
                                   color: (Colors.grey[800])!, width: 4),
                               color: Colors.grey[200],
@@ -106,30 +115,28 @@ class _MenuItemsState extends State<MenuItems> {
                                   child: CircleAvatar(
                                     radius: 20,
                                     // backgroundColor: Colors.grey[200],
-                                    foregroundImage: _image != null ? FileImage(_image!) : null,
+                                    foregroundImage: context.read<Globals>().avatarFile != null
+                                        ? FileImage(context.read<Globals>().avatarFile!)
+                                        : null,
                                     // child: Padding(
                                     //   padding: const EdgeInsets.only(top: 5.0),
-                                    //   child: Image.asset(
-                                    //     "lib/icons/profile2.JPG",
-                                    //     height: 30,
-                                    //     color: Colors.grey[900],
-                                    //   ),
+                                    //   child: DisplayPictureScreen(imageAnalysed: "base64String"),
                                     // ),
                                   ),
                                 ),
                                 const Expanded(
                                     child: Padding(
-                                      padding: EdgeInsets.only(left: 8.0),
-                                      child: Text(
-                                        textAlign: TextAlign.center,
-                                        maxLines: 2,
-                                        "Change your picture for the game",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 20,
-                                            color: Colors.black),
-                                      ),
-                                    )),
+                                  padding: EdgeInsets.only(left: 8.0),
+                                  child: Text(
+                                    textAlign: TextAlign.center,
+                                    maxLines: 2,
+                                    "Change your picture for the game",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20,
+                                        color: Colors.black),
+                                  ),
+                                )),
                               ],
                             ),
                           ),
@@ -143,7 +150,7 @@ class _MenuItemsState extends State<MenuItems> {
                             horizontal: 0.0, vertical: 10.0),
                         child: Container(
                           decoration: BoxDecoration(
-                            // boxShadow: shadow,
+                              // boxShadow: shadow,
                               border: Border.all(
                                   color: (Colors.grey[800])!, width: 4),
                               color: Colors.grey[200],
@@ -167,23 +174,23 @@ class _MenuItemsState extends State<MenuItems> {
                                       radius: 20,
                                       backgroundColor: Colors.grey[200],
                                       backgroundImage:
-                                      AssetImage("lib/icons/micro.png"),
+                                          AssetImage("lib/icons/micro.png"),
                                     ),
                                   ),
                                 ),
                                 const Expanded(
                                     child: Padding(
-                                      padding: EdgeInsets.only(left: 8.0),
-                                      child: Text(
-                                        textAlign: TextAlign.center,
-                                        maxLines: 2,
-                                        "Tap to record a 1 second onomatopoeia !",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 20,
-                                            color: Colors.black),
-                                      ),
-                                    )),
+                                  padding: EdgeInsets.only(left: 8.0),
+                                  child: Text(
+                                    textAlign: TextAlign.center,
+                                    maxLines: 2,
+                                    "Tap to record a 1 second onomatopoeia !",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20,
+                                        color: Colors.black),
+                                  ),
+                                )),
                               ],
                             ),
                           ),
@@ -196,7 +203,6 @@ class _MenuItemsState extends State<MenuItems> {
     );
   }
 }
-
 
 class ImageHelper {
   ImageHelper({
@@ -250,9 +256,9 @@ class ImageHelper {
         IOSUiSettings(
           title: 'Cropper',
         ),
-      //   WebUiSettings(
-      //     context: context,
-      //   ),
+        //   WebUiSettings(
+        //     context: context,
+        //   ),
       ],
     );
   }

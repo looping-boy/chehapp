@@ -91,6 +91,9 @@ class _MyHomePageState extends State<HomePage> with SingleTickerProviderStateMix
           ),
         ),
       ),
+      builder: (context, child) {
+        return Container(child: child);
+      },
     );
   }
 
@@ -129,6 +132,8 @@ class _MyHomePageState extends State<HomePage> with SingleTickerProviderStateMix
   @override
   void initState() {
     super.initState();
+
+    // WidgetsBinding.instance.addPostFrameCallback((_) => context.read<Globals>().initAvatarFileFromLocalStorage());
 
     _animationController = AnimationController(
       vsync: this,
