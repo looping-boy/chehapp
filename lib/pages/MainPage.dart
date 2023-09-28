@@ -23,13 +23,19 @@ class _MainPageState extends State<MainPage>
   final double verticalPadding = 25;
 
   List functionalities = [
-    ["Cheh Room", "lib/icons/user.png", false],
-    ["Snake Cheh", "lib/icons/gamepad.png", true],
+    ["Cheh Room", "lib/icons/user.png", false, false],
+    ["Snake Cheh", "lib/icons/gamepad.png", true, false],
   ];
 
   void switchChanged(bool value, int index) {
     setState(() {
       functionalities[index][2] = value;
+    });
+  }
+
+  void buttonPressed(bool value, int index) {
+    setState(() {
+      functionalities[index][3] = value;
     });
   }
 
@@ -106,6 +112,9 @@ class _MainPageState extends State<MainPage>
   void setButtonIndex(int buttonIndex) {
     widget.buttonIndex(buttonIndex);
   }
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -278,6 +287,15 @@ class _MainPageState extends State<MainPage>
                   padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 8.0),
                   itemBuilder: (context, index) {
                     return GestureDetector(
+                      onTapDown: (_) {
+                        buttonPressed(true, index);
+                      },
+                      onTapUp: (_) {
+                        buttonPressed(false, index);
+                      },
+                      onTapCancel: () {
+                        buttonPressed(false, index);
+                      },
                       onTap: () => {setButtonIndex(index)},
                       child: AnimatedContainer(
                         curve: Curves.easeInOut,
@@ -288,6 +306,7 @@ class _MainPageState extends State<MainPage>
                           smartButtonName: functionalities[index][0],
                           iconPath: functionalities[index][1],
                           powerOn: functionalities[index][2],
+                          pressed: functionalities[index][3],
                           onChanged: (value) => switchChanged(value, index),
                         ),
                       ),
